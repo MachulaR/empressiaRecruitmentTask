@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Reservation
 {
+    const DISCOUNT_FOR_SEVEN_DAYS = 0.1; // 10%
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -106,5 +108,18 @@ class Reservation
         $this->totalPrice = $totalPrice;
 
         return $this;
+    }
+
+    public function calculatePrice()
+    {
+        $price = $this->getHotel()->getPrice();
+        $days = $this->getStartDate()->diff($this->getEndDate())->format("%d");
+        $beds = $this->getBeds();
+        $calculatedPrice = $price * $days * $beds;
+        if ($days > 7) {
+            $calculatedPrice = $calculatedPrice - self::DISCOUNT_FOR_SEVEN_DAYS * $calculatedPrice;
+        }
+
+        return $calculatedPrice;
     }
 }
