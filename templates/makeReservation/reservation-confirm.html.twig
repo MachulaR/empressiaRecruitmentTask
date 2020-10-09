@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    Hotel: {{ reservation.hotel.name }} ({{ reservation.hotel.address }}) <br />
+    Beds: {{ reservation.beds }} <br />
+    from: {{ reservation.startDate|date('Y-m-d') }} to: {{ reservation.endDate|date('Y-m-d') }} <br />
+    price total: {{ reservation.totalPrice }} <br />
+{% endblock %}
