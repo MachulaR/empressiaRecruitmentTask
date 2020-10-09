@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block message %}
+        {% include "../messages/alert.html.twig" %}
+    {% endblock %}
+    {{ form_start(reservationForm, {'action': path('reservation_confirm'), 'method': 'POST'}) }}
+    {{ form_widget(reservationForm) }}
+    {{ form_end(reservationForm) }}
+{% endblock %}
