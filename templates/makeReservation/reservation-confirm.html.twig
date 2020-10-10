@@ -5,4 +5,5 @@
     Beds: {{ reservation.beds }} <br />
     from: {{ reservation.startDate|date('Y-m-d') }} to: {{ reservation.endDate|date('Y-m-d') }} <br />
     price total: {{ reservation.totalPrice }} <br />
+    {#button with ajax to confirm reservation#}
 {% endblock %}

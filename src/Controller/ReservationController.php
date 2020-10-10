@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ReservationController extends AbstractController
 {
-
     /** @var FlashBagInterface */
     private $flashBag;
 
@@ -72,6 +71,29 @@ class ReservationController extends AbstractController
     }
 
     /**
+     * @Route("/confirmed", name="make")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function makeReservation(Request $request)
+    {
+        $reservation = new Reservation();
+        $form = $this->createForm(ReservationType::class, $reservation);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Reservation $reservation */
+            $reservationToMake = $form->getData();
+            $this->createReservation($reservationToMake);
+
+            $this->flashBag->add('success', 'reservation completed!');
+        } else {
+            $this->flashBag->add('danger', 'Something went wrong');
+        }
+
+        return $this->redirectToRoute('reservation_index');
+    }
+
+    /**
      * @param Reservation $reservationToConfirm
      * @return bool
      */
@@ -93,5 +115,30 @@ class ReservationController extends AbstractController
             $from->modify("+1 day");
         }
         return true;
+    }
+
+    private function createReservation(Reservation $reservation)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $hotel = $reservation->getHotel();
+
+        $hotelReservations = $hotel->getReservations();
+        $from = new \DateTime();
+        $from->setTimestamp($reservation->getStartDate()->getTimestamp());
+        $to = $reservation->getEndDate();
+        while ($from != $to) {
+            if (!key_exists($from->format('yyyy-MM-dd'), (array)$hotelReservations)) {
+                $hotelReservations[$from->format('yyyy-MM-dd')] = 0;
+            }
+            $hotelReservations[$from->format('yyyy-MM-dd')] += $reservation->getBeds() ;
+
+            $from = $from->modify("+1 day");
+        }
+        $hotel->setReservations($hotelReservations);
+
+        $entityManager->persist($hotel);
+        $entityManager->persist($reservation);
+        $entityManager->flush();
     }
 }
