@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/reservation", name="reservation_")
  */
-class ReservationController extends AbstractController
+class MakeReservationController extends AbstractController
 {
     /** @var FlashBagInterface */
     private $flashBag;
