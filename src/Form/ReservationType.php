@@ -36,13 +36,13 @@ class ReservationType extends AbstractType
             ])
             ->add('startDate', DateType::class, [
                 'input' => 'datetime_immutable',
-                'format' => 'yyyy-MM-dd',
+                'format' => 'y-M-d',
                 'label' => "From:",
                 'required' => true,
             ])
             ->add('endDate', DateType::class, [
                 'input' => 'datetime_immutable',
-                'format' => 'yyyy-MM-dd',
+                'format' => 'y-M-d',
                 'label' => "To:",
                 'required' => true,
             ])

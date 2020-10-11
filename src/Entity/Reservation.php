@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
@@ -27,6 +28,7 @@ class Reservation
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\GreaterThan("today")
      */
     private $startDate;
 
@@ -121,5 +123,13 @@ class Reservation
         }
 
         return $calculatedPrice;
+    }
+
+    /**
+     * @Assert\IsTrue(message="Start date must be earlier than end date")
+     */
+    public function isStartDate()
+    {
+        return $this->startDate < $this->endDate ;
     }
 }
