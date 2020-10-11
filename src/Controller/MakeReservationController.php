@@ -105,11 +105,11 @@ class MakeReservationController extends AbstractController
         $from->setTimestamp($reservationToConfirm->getStartDate()->getTimestamp());
         $to = $reservationToConfirm->getEndDate();
         while ($from != $to) {
-            if (!key_exists($from->format('yyyy-MM-dd'), (array)$reservations)) {
-                $reservations[$from->format('yyyy-MM-dd')] = 0;
+            if (!key_exists($from->format('Y-M-d'), (array)$reservations)) {
+                $reservations[$from->format('Y-M-d')] = 0;
             }
 
-            if ($reservationToConfirm->getBeds() > $reservationToConfirm->getHotel()->getBeds() - $reservations[$from->format('yyyy-MM-dd')]) {
+            if ($reservationToConfirm->getBeds() > $reservationToConfirm->getHotel()->getBeds() - $reservations[$from->format('Y-M-d')]) {
                 return false;
             }
             $from->modify("+1 day");
@@ -128,10 +128,10 @@ class MakeReservationController extends AbstractController
         $from->setTimestamp($reservation->getStartDate()->getTimestamp());
         $to = $reservation->getEndDate();
         while ($from != $to) {
-            if (!key_exists($from->format('yyyy-MM-dd'), (array)$hotelReservations)) {
-                $hotelReservations[$from->format('yyyy-MM-dd')] = 0;
+            if (!key_exists($from->format('Y-M-d'), (array)$hotelReservations)) {
+                $hotelReservations[$from->format('Y-M-d')] = 0;
             }
-            $hotelReservations[$from->format('yyyy-MM-dd')] += $reservation->getBeds() ;
+            $hotelReservations[$from->format('Y-M-d')] += $reservation->getBeds() ;
 
             $from = $from->modify("+1 day");
         }

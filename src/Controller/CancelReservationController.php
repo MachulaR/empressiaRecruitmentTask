@@ -118,9 +118,9 @@ class CancelReservationController extends AbstractController
         $from->setTimestamp($reservation->getStartDate()->getTimestamp());
         $to = $reservation->getEndDate();
         while ($from != $to) {
-            $hotelReservations[$from->format('yyyy-MM-dd')]-= $reservation->getBeds() ;
-            if ($hotelReservations[$from->format('yyyy-MM-dd')] == 0) {
-                unset($hotelReservations[$from->format('yyyy-MM-dd')]);
+            $hotelReservations[$from->format('Y-M-d')]-= $reservation->getBeds() ;
+            if ($hotelReservations[$from->format('Y-M-d')] == 0) {
+                unset($hotelReservations[$from->format('Y-M-d')]);
             }
             $from = $from->modify("+1 day");
         }
