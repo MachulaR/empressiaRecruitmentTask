@@ -106,4 +106,9 @@ class Hotel
 
         return $this;
     }
+
+    public function getReservationForm()
+    {
+        return $this->name.' ('.$this->address.') PRICE:'.$this->price;
+    }
 }

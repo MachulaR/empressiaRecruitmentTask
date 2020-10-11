@@ -68,9 +68,13 @@ class CancelReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $reservationNumber = $form->getData()['reservationNumber'];
-            $reservation = $this->reservationsRepository->find($reservationNumber) ;
+            $reservation = $this->reservationsRepository->find($reservationNumber);
+            if (!$reservation) {
+                $this->flashBag->add('danger', 'reservation not exist');
+                return $this->redirectToRoute('reservation_cancel');
+            }
             $today = new \DateTime();
-            if (/*$reservation->getStartDate()->getTimestamp() > $today->getTimestamp() && */ $reservation->getStartDate()->diff($today)->days > 2) {
+            if ($reservation->getStartDate()->getTimestamp() > $today->getTimestamp() && $reservation->getStartDate()->diff($today)->days > 2) {
                 $viewData = [
                     'reservation' => $reservation,
                 ];
